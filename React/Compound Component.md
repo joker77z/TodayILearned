@@ -148,13 +148,15 @@ export default function ButtonGroupDescription({ description }) {
 
 
 
+# 결과
 
+결과적으로 컴포넌트의 복잡도를 낮추어 깔끔하게 작성할 수 있게 되었고, 적은 결합도를 유지하면서 공통 관심사를 모을 수 있었다. 더이상 컴포넌트들이 서로 복잡하게 엮이지 않고, 각 역할마다 명확하게 컴포넌트를 분리할 수 있어서 재사용성이 높고 유지 보수성이 좋아졌다.
 
 
 
 # 전체 코드 보기
 
-https://codesandbox.io/s/peaceful-wright-tobnm7?file=/src/components/ButtonGroups/TopTitleButtonGroup.js
+[코드 샌드박스](https://codesandbox.io/s/peaceful-wright-tobnm7?file=/src/components/ButtonGroups/TopTitleButtonGroup.js)
 
 
 
