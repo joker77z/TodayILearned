@@ -57,6 +57,8 @@ export default function App() {
 
 
 
+
+
 하위 컴포넌트인 Input이나 Button으로 context를 제공한다.
 
 ```jsx
@@ -93,6 +95,8 @@ export default function Shuffle({
 
 
 
+
+
 type이나 disabled같은 속성들은 spread된 others를 통해 들어온다.
 
 ```jsx
@@ -107,6 +111,8 @@ export default function Input({ ...others }) {
   return <input value={ShuffleContext.value} {...others} />;
 }
 ```
+
+
 
 
 
@@ -141,10 +147,6 @@ export default function Button({ type, children }) {
   );
 }
 ```
-
-
-
-
 
 
 
