@@ -57,7 +57,7 @@ export default function App() {
 
 
 
-  
+<br />
 
 하위 컴포넌트인 Input이나 Button으로 context를 제공한다.
 
@@ -95,7 +95,7 @@ export default function Shuffle({
 
 
 
-  
+  <br />
 
 type이나 disabled같은 속성들은 spread된 others를 통해 들어온다.
 
@@ -112,7 +112,7 @@ export default function Input({ ...others }) {
 }
 ```
 
-  
+  <br />
 
  Button컴포넌트에서 랜덤으로 만든 숫자를 onShuffle함수의 인수로 보낸다.
 
