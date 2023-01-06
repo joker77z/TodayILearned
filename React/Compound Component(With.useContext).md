@@ -57,7 +57,7 @@ export default function App() {
 
 
 
-
+  
 
 하위 컴포넌트인 Input이나 Button으로 context를 제공한다.
 
@@ -95,7 +95,7 @@ export default function Shuffle({
 
 
 
-
+  
 
 type이나 disabled같은 속성들은 spread된 others를 통해 들어온다.
 
@@ -112,13 +112,11 @@ export default function Input({ ...others }) {
 }
 ```
 
-
-
-
-
-> type으로 shuffle할지, reset할지 나누는 것은 좋지 않은 코드지만 지금은 compound Component에서 context를 사용하는 것의 장단점을 알아보기 위해서다.
+  
 
  Button컴포넌트에서 랜덤으로 만든 숫자를 onShuffle함수의 인수로 보낸다.
+
+> type으로 shuffle할지, reset할지 나누는 것은 좋지 않은 코드지만 지금은 compound Component에서 context를 사용하는 것의 장단점을 알아보기 위해서다.
 
 ```jsx
 > src/components/common/Button.jsx
