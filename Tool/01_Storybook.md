@@ -151,7 +151,7 @@ before와 after를 구별해보면 좀 더 구조가 명확하고 이해하기�
 
 결과적으로 이와 같은 개선으로 인해 스토리북에 올리기도 쉬워졌고 유지보수성도 좋아졌다.
 
-![사진](https://fe-developers.kakaoent.com/9d2e1f29cfb010e3aae6cd76547c4bab/addon-controls-optimized.mp4)
+![storybook](https://fe-developers.kakaoent.com/9d2e1f29cfb010e3aae6cd76547c4bab/addon-controls-optimized.mp4)
 
 <br/>
 
