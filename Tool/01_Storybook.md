@@ -153,7 +153,7 @@ before와 after를 구별해보면 좀 더 구조가 명확하고 이해하기�
 
 <br/>
 
-# 스토리북을 활용하여 나아진 사례1 : 그려서는 안되는 결과물로 그릴 경우
+# 스토리북을 활용하여 나아진 사례2 : 그려서는 안되는 결과물로 그릴 경우
 
 컴포넌트에 많고 타입이 명확하지 않은 variation(props)이 주어지게 되면 컴포넌트의 재활용성은 올라가고 유연성이 좋아진다. 하지만, 재사용을 잘못하면 결함이라고 느낄 수 있는 상황이 벌어지기도 한다. 즉, 재사용 범위가 넓어진 만큼, 잘 사용하기는 어려워지고 오히려 재사용성이 떨어지는 결과가 발생한다.
 
@@ -169,7 +169,7 @@ Date타입을 사용했다면 이런 상황을 방지할 수 있다.
 
 ![Headwind example](https://fe-developers.kakaoent.com/static/bd8627dc8503776cc8cda898021fde92/f058b/chapter-date.png)
 
-
+<br />
 
 ## 두번째 예
 
@@ -185,18 +185,129 @@ const Face = ({ eyesY }: { eyesY: 'top' | 'middle' | 'bottom' }) => {...}
 
 전자의 방식으로 컴포넌트를 렌더링 한다면, 눈이 얼굴보다 더 아래에 있는 상황이 만들어질 수도 있다. 그러나 아래와 같이 정해진 틀을 제공한다면 그럴일이 없다. 하지만, 이렇게 제한하는 것이 무조건 좋은 것은 아니다. 유연성이 늘어날수록 재사용성이 좋아진다. 이렇게 하기 위해서는 **유연성이 높은 컴포넌트들을 먼저 만들고 다음으로 목적과 용도에 맞게 유연성이 낮은 컴포넌트로 조립해가는 것이 베스트라고 말한다.**
 
-
+<br />
 
 ## 컴포넌트의 유연성을 확장하기 위한 패턴
 
+### 방법1 : 스타일을 외부에서 주입하기
+
+대표적인 예시는 스타일을 외부에서 주입하는 것이라고 한다. 아래 예시는 classes 라는 props에 tailwind 클래스로 스타일을 주입하는 예시다. 스타일 충돌 처리를 위해tailwind merge를 사용했다.
+
+```jsx
+const Face = ({ classes }) => {
+  return (
+    <>
+      <Eyes className={classes.eyes} />
+      <Nose className={twMerge('mx-auto', classes.nose)} />
+      <Mouse className={twMerge('bg-red', classes.mouth)} />
+    </>
+  );
+};
+```
+
+<br />
+
+### 방법2 : Compound Pattern으로 조합하는 방식
+
+```js
+const Face = ({ children }) => {
+  return <>{children}</>;
+};
+
+const Eyes = () => <>{'...'}</>;
+const Nose = () => <>{'...'}</>;
+
+Face.Eyes = Eyes;
+Face.Nose = Nose;
+```
+
+```jsx
+const AngryFace = () => (
+  <Face>
+    <Face.Eyes className="scale-x-50" />
+    <Face.Nose className="bg-red" />
+    {'...'}
+  </Face>
+);
+```
 
 
 
+# 스토리북을 활용하여 나아진 사례3 : 독립해서 그려보니 의도와 다르게 그려진 경우
+
+## 첫번째 예
+
+컴포넌트가 다른 컴포넌트에 의존성을 가졌을 경우, 독립해서 그려보니 예상과 다르게 그려지는 경우가 있다.
+
+부모의 스타일에 의존하는 경우가 그렇다고 볼 수 있다.
+
+```jsx
+<div className="relative h-50 w-100">
+  <Thumbnail />
+</div>
+
+// Thumbnail.tsx
+const Thumbnail = () => (
+  <div className="absolute right-0 h-50 w-50">
+    <img />
+  </div>
+);
+```
+
+이런 스타일을 가진 컴포넌트의 경우 화면에서 사라지고 잘 찾아보면 오른쪽 구석에서 찾을 수 있다. 이런 경우 부모 컴포넌트와 같이 스토리를 만든다.
+
+<br />
+
+## 두번째 예
+
+앱에서 ChapterTitle은 굉장히 자연스럽게 쓰이고 있다. 컴포넌트 상단에 여백이 적합한 문맥에 배치되어 있기 때문이다. 하지만, 스토리북에 그려보니 어색하게 그려진다.
+
+```jsx
+const ChapterTitle = () => {
+  <div className="pt-34">
+    <InnerContent />
+  </div>;
+};
+```
+
+<br />
+
+아래와 같이 ChapterTitle 자체는 여백을 갖지 않게해서 스토리북에서 원하는데로 그릴 수 있다. 이렇게 하면 자연스럽게 다른 곳에서 재사용성도 좋아진다.
+
+```jsx
+const ChapterTitle = () => <InnerContent />;
+
+<div className="pt-34">
+  <ChapterTitle />
+</div>;
+```
+
+<br />
+
+## 세번째 예
+
+앱에서 `useModal`을 실행하면 전역 환경에 선언된 모달을 띄워주는 기능을 잘 수행한다. 하지만, 스토리북의 독립된 환경에서 실행하면 useModal을 처리하지 못하고 에러를 반환한다. 환경에 의존성을 갖고 있는 경우다. 
+
+```jsx
+const Component = () => {
+  const { openModal } = useModal(); // 전역에 선언된 모달을 띄워준다.
+  <button onClick={() => openModal()} />;
+};
+```
+
+<br />
+
+다음과 같이 환경에 의존하지 않도록 커스텀훅을 사용하지 않고 클릭했을 때 실행할 함수를 전달받으면
+
+스토리북에서 어떤 버튼을 클릭했을 때 어떤 이벤트가 발생할지 예측할 수 있다.
+
+결과적으로 스토리북으로 옮기는 것이 가능해진다.
+
+```jsx
+const Component = ({ onOpenModal }) => <button onClick={() => onOpenModal()} />;
+```
+
+> 스토리북에서 버튼을 클릭하면 onOpenModal 버튼을 클릭할 때마다 Actions 탭에 추가되는 것을 볼 수 있다.
 
 
-
-
-
-- 스토리북만 UI컴포넌트 미리보기가 가능한가?
-  아니다. Bit, Pattern Lab, Framer등 많은 툴에서 UI미리보기를 제공한다.
 
