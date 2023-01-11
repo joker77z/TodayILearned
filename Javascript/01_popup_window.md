@@ -229,4 +229,59 @@ document.domain = 'site.com'
 
 ### 1. postMessage
 
-메시지 전송하기를 원하는 윈도우 창에서 
+```js
+target.postMessage(data, targetOrigin)
+```
+
+- target
+
+  - 부모 윈도우에서 자식 윈도우로 메세지를 전달할 경우
+
+     부모 윈도우의 javascript 파일에서 window.open의 참조 target에게 메세지를 보낼 수 있다. 
+
+  - 자식 윈도우에서 부모 윈도우로 메세지를 전달할 경우
+
+    자식 윈도우의 javascript 파일에서 window.opener의 참조 target에게 메세지를 보낼 수 있다.
+
+- data
+
+  data의 경우 IE는 JSON.stringify를 사용하여 문자열로 직렬화해서 보내야 하고, 다른 브라우저의 경우 직렬화 알고리즘을 통해 직렬화를 지원하여 객체를 사용해도 된다.
+
+- targetOrigin
+
+  targetOrigin은 지정된 오리진과 일치한 url을 가져야 메세지를 받을 수 있다.
+
+  
+
+### 2. onMessage
+
+메시지를 수신하기 위해서 타겟 윈도우는 message 이벤트 핸들러인 addEventListener의 message를 사용해야 한다. postMessage가 호출되었을 때만 동작한다.
+
+```js
+window.addEventListener('message', function(event) {
+  if (event.origin !== 'http://javascript.info') {
+    // 알려지지 않은 도메인일 경우 무시
+    return;
+  }
+  
+  alert('received: ', event.data);
+  
+  // 송신측에 바로 답장...
+  // event.source.postMessage(...);
+});
+```
+
+- data
+
+  postMessage를 통해 전달된 데이터
+
+- origin
+
+  송신측 오리진
+
+- source
+
+  송신측 오리진의 참조. 이를 통해 source.postMessage(....)를 통해 송신 윈도우에게 답장이 가능하다.
+
+  
+
