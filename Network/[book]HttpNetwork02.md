@@ -17,12 +17,12 @@ Http는 클라이언트로 요청(request)을 하면, 결과가 응답(response)
 - 리퀘스트 헤더
 - 엔티티
 
-```js
+```http
 // 메소드, URI, 프로토콜 버전
 POST /form/entry HTTP/1.1
 ```
 
-```js
+```http
 // 리퀘스트 헤더
 Host: hacker.jp
 Connection: keep-alive
@@ -30,7 +30,7 @@ Content-Type: application/x-www-form-urlencoded
 Content-Length: 16
 ```
 
-```js
+```http
 // 엔티티
 name=ueno&age=37
 ```
@@ -41,12 +41,12 @@ name=ueno&age=37
 
 리퀘스트 내용을 처리한 결과를 리스폰스로 클라이언트에 돌려준다.
 
-```js
+```http
 // 프로토콜 버전, 상태코드, 상태코드 설명
 HTTP /1.1 200 OK
 ```
 
-```js
+```http
 // 헤더 영역
 Date: Tue, 10 Jul 2012 06:50:15 GMT
 Content-Length: 362
@@ -77,13 +77,13 @@ HTTP는 URI를 사용해서 리소스를 지정한다.
 
 - 모든 URI를 리퀘스트URI에 포함.
 
-  ```js
+  ```http
   GET http://hackr.jp/index.html HTTP/1.1
   ```
 
 - 헤더의 Host필드에 네트워크 로케이션을 포함.
 
-  ```js
+  ```http
   GET /index.html HTTP/1.1
   Host: hackr.jp
   ```
