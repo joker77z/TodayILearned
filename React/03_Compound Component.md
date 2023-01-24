@@ -44,14 +44,14 @@
 
 ```
 
-
+<br />
 
 ## 코드
 
 이제 어떤 식으로 코드들을 작성했는지 살펴보자.
 무관하게 코드가 어떤 식으로 작성되는지 알 수 있도록 하기 위해 스타일 내용은 제외했다.
 
-
+<br />
 
 ### 사용하는 곳
 
@@ -75,7 +75,7 @@ export default function App() {
 }
 ```
 
-
+<br />
 
 ### 컴포넌트
 
@@ -103,7 +103,7 @@ export default function TopTitleButtonGroup({ title, description, children }) {
 
 ```
 
-
+<br />
 
 다음으로, 서브 컴포넌트들을 살펴볼 차례다.
 
@@ -120,13 +120,31 @@ function ButtonGroup({ children }) {
   return <div style={{ border: "1px solid black" }}>{children}</div>;
 }
 
-ButtonGroup.title = ButtonGroupTitle;
-ButtonGroup.description = ButtonGroupDescription;
+ButtonGroup.Title = ButtonGroupTitle;
+ButtonGroup.Description = ButtonGroupDescription;
 
 export default ButtonGroup;
 ```
 
+> 자바스크립트의 특성을 이용해서 위 예제처럼 함수에 직접 객체처럼 키, 값을 대입하는 방식도 있지만 Object.assign을 사용해서 키, 값을 대입하는 방식도 있다. SubComponents/index.js 파일을 만들고 아래처럼 만드는 것이다.
+> 이 때 단점은 ButtonGroup이라는 이름으로 묶기 위해서 기존에 썼던 ButtonGroup을 ButtonGroupWrapper 식으로 네이밍을 바꿔야 한다.
+>
+> ```jsx
+> import ButtonGroupDescription from "./ButtonGroupDescription";
+> import ButtonGroupTitle from "./ButtonGroupTitle";
+> import ButtonGroupWrapper from "./ButtonGroupWrapper";
+> 
+> const ButtonGroup = Object.assign(ButtonGroupWrapper, {
+>   Title: ButtonGroupTitle,
+>   Description: ButtonGroupDescription
+> });
+> 
+> export default ButtonGroup;
+> ```
 
+
+
+<br/>
 
 이어서, ButtonGrouopTitle과 ButtonGroupDescription이다.
 
@@ -146,19 +164,19 @@ export default function ButtonGroupDescription({ description }) {
 }
 ```
 
-
+<br/>
 
 # 결과
 
 결과적으로 컴포넌트의 복잡도를 낮추어 깔끔하게 작성할 수 있게 되었고, 적은 결합도를 유지하면서 공통 관심사를 모을 수 있었다. 더이상 컴포넌트들이 서로 복잡하게 엮이지 않고, 각 역할마다 명확하게 컴포넌트를 분리할 수 있어서 재사용성이 높고 유지 보수성이 좋아졌다.
 
-
+<br/>
 
 # 전체 코드 보기
 
 [코드 샌드박스](https://codesandbox.io/s/peaceful-wright-tobnm7?file=/src/components/ButtonGroups/TopTitleButtonGroup.js)
 
-
+<br/>
 
 # 참고
 

@@ -1,1 +1,0 @@
-> Object.assign을 사용해서 
