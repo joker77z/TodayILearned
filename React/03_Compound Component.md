@@ -135,8 +135,8 @@ export default ButtonGroup;
 > import ButtonGroupWrapper from "./ButtonGroupWrapper";
 > 
 > const ButtonGroup = Object.assign(ButtonGroupWrapper, {
->   Title: ButtonGroupTitle,
->   Description: ButtonGroupDescription
+>       Title: ButtonGroupTitle,
+>       Description: ButtonGroupDescription
 > });
 > 
 > export default ButtonGroup;
