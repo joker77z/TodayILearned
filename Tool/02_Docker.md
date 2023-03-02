@@ -129,3 +129,72 @@ exit
 ```
 
 > 위 과정을 docker for mac에서 container를 실시간으로 확인해보니까 컨테이너가 생성되고 실행하고 지워지는 모습을 볼 수 있었다.
+
+<br />
+
+### redis container
+
+redis는 메모리 기반의 다양한 기능을 가진 스토리지다. redis는 6379포트로 통신하며, telnet 명령어로 테스트해 볼 수 있다. redis는 백그라운드 모드로 실행하기 위해 `-d`옵션을 추가하고 `-p`옵션을 추가해 컨테이너 포트를 호스트 포트로 연결해보자.
+
+> -d 옵션이 없다면 foreground 로 실행되어 아무키도 입력할 수 없다. 컨테이너를 종료할 땐 ctrl+c로 종료할 수 있다.
+
+<br />
+
+```bash
+> docker run -d -p 1234:6379 redis // -p 옵션은 <host port>:<container port>를 입력해서 포트 맵핑을 해줄 수 있다.
+5fdds....
+
+> telnet localhost 1234
+> set mykey hello
++OK
+> get mykey
+$5
+hello
+```
+
+> telnet명령어가 되지 않길래 당황했는데 이것도 설치해줘야 한다. `brew install telnet`으로 설치해주자.
+
+백그라운드 모드로 실행했기 때문에 컨테이너ID를 보여주고 쉘로 돌아온다. 이 때 컨테이너는 백그라운드에서 동작하고 있기 때문에 제어할 수 있다. localhost의 1234포트로 접속하면 redis를 사용할 수 있다. 호스트를 다르게 하면 하나의 서버에 여러 redis서버도 띄울 수 있다.
+
+<br />
+
+### MySQL 5.7 container
+
+이번에 실행해 볼 컨테이너는 MySQL 서버다. 가장 흔히 사용하는 DB로 이번에는 `-e`옵션을 이용해 환경변수를 설정하고, `--name`옵션을 이용해 컨테이너에 읽기 어려운 ID대신 쉬운 이름을 부여할 것이다.
+
+> --name옵션을 생략하면 docker가 자동으로 이름을 지어준다. 과학자나 해커의 이름과 수식어를 조합하여 랜덤으로 생성한다. (장영실도 등록되어있다고 한다.)
+
+[MySQL Docker hub](https://hub.docker.com/_/mysql/)에서 다양한 명령어를 확인할 수 있지만, 간단한 사용법과 환경변수에 대한 설명이 있다. 우리는 패스워드없이 root계정을 만들기 위해 MYSQL_ALLOW_EMPTY_PASSWORD 환경변수를 설정하자. 그리고 컨테이너 이름은 mysql, 백그라운드 모드로 띄운다. 포트는 3306포트를 호스트에서도 그대로 사용해보자.
+
+```bash
+$ docker run -d -p 3306:3306 \
+  -e MYSQL_ALLOW_EMPTY_PASSWORD=true \
+  --name mysql \
+  mysql
+  
+$ mysql -h127.0.0.1 -u root
+
+mysql > show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+4 rows in set (0.00 sec)
+
+mysql> quit
+```
+
+> 이번에도 역시 host OS에 mysql 클라이언트가 설치되어 있어야 명령어를 실행할 수 있다. 추후에는 mysql 도커 컨테이너에 접속해서 클라이언트를 실행해보자.
+
+<br />
+
+### wordpress container
+
+블로그엔진으로 유명한 워드프레스를 실행해보자. 워드프레스는 DB가 필요하다. 바로 위에서 만들었던 mySQL 컨테이너에 워드프레스가 사용할 DB를 만들고 WordPress 컨테이너를 실행할 때 `--link` 옵션으로 DB를 연결해보자.
+
+> `--link`옵션은 환경변수, IP정보를 공유하는데 `/etc/hosts` 에 자동으로 입력하면서 워드프레스 컨테이너가 mysql db의 정보를 알 수 있게 된다.
+
