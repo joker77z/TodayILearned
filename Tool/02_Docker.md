@@ -117,7 +117,7 @@ ubuntu16.04 컨테이너를 생성하고 내부로 들어가보자.
 docker run ubutntu:16.04
 ```
 
-`run` 명령어를 사용하면 사용할 이미지가 저장되어 있는지 확인하고 없으면 다운로드 한 후 컨테이너를 생성하고 시작한다. 컨테이너는 정상적으로 생성됐지만 어떤 것을 하라고 명령어를 전달하지 않아서 컨테이너는 생성되자마자 종료된다. (컨테이너는 프로세스이기 때문에 실행 중인 프로세스가 없으면 종료된다!)
+**`run` 명령어를 사용하면 사용할 이미지가 저장되어 있는지 확인하고 없으면 다운로드 한 후 컨테이너를 생성하고 시작한다.** 컨테이너는 정상적으로 생성됐지만 어떤 것을 하라고 명령어를 전달하지 않아서 컨테이너는 생성되자마자 종료된다. (컨테이너는 프로세스이기 때문에 실행 중인 프로세스가 없으면 종료된다!)
 
 이번에는 `/bin/bash`명령어로 ubuntu:16.04 컨테이너를 실행하고 접속해보자. 이때 키보드 입력을 위해 `-it`옵션을 주고 프로세스가 종료되면 컨테이너가 자동으로 삭제되도록 `--rm`옵션도 추가한다. 그 다음 `cat /etc/issue`와 `ls`를 입력해 ubuntu 리눅스인 것을 확인해보자. 그리고 마지막으로 exit로 종료해보자. 그러면 bash 셀이 종료되고 컨테이너도 함께 종료된다.
 
@@ -194,8 +194,41 @@ mysql> quit
 
 ### wordpress container
 
-블로그엔진으로 유명한 워드프레스를 실행해보자. 워드프레스는 DB가 필요하다. 바로 위에서 만들었던 mySQL 컨테이너에 워드프레스가 사용할 DB를 만들고 WordPress 컨테이너를 실행할 때 `--link` 옵션으로 DB를 연결해보자.
+블로그엔진으로 유명한 워드프레스를 실행해보자. 워드프레스 컨테이너는 DB컨테이너와 연결이 필요하다. 바로 위에서 만들었던 mySQL 컨테이너에 워드프레스가 사용할 DB를 만들고 WordPress 컨테이너를 실행할 때 `--link` 옵션으로 DB를 연결해보자.
 
-> `--link`옵션은 환경변수, IP정보를 공유하는데 `/etc/hosts` 에 자동으로 입력하면서 워드프레스 컨테이너가 mysql db의 정보를 알 수 있게 된다.
+> `--link`옵션은 컨테이너의 IP정보를 `/etc/hosts` 에 자동으로 입력하면서 워드프레스 컨테이너가 mysql db의 정보를 알 수 있게 된다.
 
-df
+먼저 DB를 생성하고 워드프레스 컨테이너를 실행한다. 호스트의 8080포트를 워드프레스 컨테이너의 80포트와 연결하고 DB설정 정보를 환경변수로 입력한다.
+
+```bash
+$ mysql -h127.0.0.1 -uroot
+$ CREATE DATABASE wp CHARACTER SET utf-8;
+$ GRANT ALL PRIVILEGES ON wp.* to wp@'%' IDENTIFIED BY 'wp';
+$ FLUSH PRIVILEGES;
+$ QUIT;
+
+$ docker run -d -p 8080:80 \
+	--link mysql:sql \
+	-e WORDPRESS_DB_HOST=mysql \
+	-e WORDPRESS_DB_NAME=wp \
+	-e WORDPRESS_DB_USER=wp \
+	-e WORDPRESS_DB_PASSWORD=wp \
+	wordpress
+```
+
+이렇게 하면 워드프레스가 정상적으로 실행된다. 워드프레스 컨테이너는 내부적으로 apache2와 php가 설치되어 있다.
+
+> 해당 예제는 테스트용으로만 사용해야 하고 link 옵션은 deprecated되어 곧 사용할 수 없다.
+
+<br />
+
+### tensorflow
+
+마지막으로 이렇게 활용할 수 있다 예제로 tensorflow를 실행해보자. tensorflow는 손쉽게 머신러닝을 할 수 있는 툴이다. phthon으로 만들어져 있기 때문에 phthon관련 패키지를 설치해야 한다. 이번에 설치하는 이미지는 python과 함께 numpy, scipy, pandas, jupyter, scikit-learn, gensim, BeautifulSoup4, Tensorflow가 설치되어 있다.
+
+
+
+
+
+
+
