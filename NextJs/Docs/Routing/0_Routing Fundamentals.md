@@ -128,11 +128,13 @@ App 라우터는 고급 라우팅 패턴을 구현하는데 도움이 되는 규
 
 이런 패턴으로 더 풍부하고 복잡한 UI를 구축해서 과거에 복잡했던 기능을 구현할 수 있다.
 
-
+> 이제 공식문서의 Routing을 따라가면 된다.
 
 
 
 > **참고**  
 >
-> [벨로그 라우팅 기본](https://velog.io/@chaewonkang/Next.js-13-1.-Routing-1.1-Routing-Fundamentals)
+> - [Next.js 공식 문서](https://nextjs.org/docs/app/building-your-application/routing)
+>
+> - [벨로그 라우팅 기본](https://velog.io/@chaewonkang/Next.js-13-1.-Routing-1.1-Routing-Fundamentals)
 
