@@ -16,9 +16,9 @@
 
 `/app/blog/[slug]/page.js`
 
-```ts
+```tsx
 export default function Page({ params }) {
-  return ...
+  return <div>My Post: {params.slug}</div>
 }
 ```
 
