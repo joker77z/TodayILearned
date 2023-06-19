@@ -271,3 +271,6 @@ export default async function Page() {
 }
 ```
 
+
+
+> Data Fetching에 추가적으로 Cashing, Revalidating, Server Actions가 있다.
