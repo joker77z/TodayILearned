@@ -1,5 +1,3 @@
-[TOC]
-
 > [Integrate Next.js and Storybook - Storybook](https://storybook.js.org/recipes/next)
 
 ---
